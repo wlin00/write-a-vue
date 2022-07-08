@@ -6,8 +6,7 @@ export function initMixin(Vue) {
   Vue.prototype._init = function (options) {
     console.log('op', options)
     const vm = this
-    // 选项合并
-    vm.$options = options
+    vm.$options = options // 这里其实还需要做选项合并 - 将其他上层组件的选项与当前传入选项做合并，但这里简单做只是获取了当前实例的选项
     // initState：对data、props、method进行初始化
     initState(vm)
     vm._self = vm
