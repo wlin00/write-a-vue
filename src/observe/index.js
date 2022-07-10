@@ -8,7 +8,7 @@ class Observer {
 }
 
 function defineReactive(target, key, value) {
-  observe(value) // 开始先对当前key对应的value做一次递归挟持，若这个value是普通数据类型就直接不操作
+  observe(value) // 开始先对当前key对应的value做一次递归挟持，若这个value是普通数据类型就直接不操作; 此处为挟持一开始就为对象的键值value
   Object.defineProperties(target, key, {
     configurable: true,
     enumerable: true,
@@ -20,7 +20,7 @@ function defineReactive(target, key, value) {
         return // 若当前改变的值和data中属性值一样，则return
       }
       console.log('set', newValue)
-      observe(newValue)
+      observe(newValue) // 此处为了挟持newValue修改为对象后，新对象内部的数据
       value = newValue
     }
   })
