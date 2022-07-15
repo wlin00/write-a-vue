@@ -17,10 +17,10 @@
         el: "#app",
         data: {
           msg: 1,
-          msg1: { a: 2 }
+          msg1: [{name: 'inner'}]
         },
       });
-      console.log('vv', vm)
+      console.log('vv', vm, vm.msg1[0].name)
     </script>
   </body>
 </html>
