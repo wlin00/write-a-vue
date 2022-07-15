@@ -10,7 +10,7 @@ export function initState(vm) { // initState 给当前的vm对象做props、meth
   }
 }
 
-function initData(vm) {
+function initData(vm) { // 实现数据代理，将vm.xxx 代理到 vm._data
   let data = vm.$options.data // 拿到当前data
   data = typeof data === 'function' ? data.call(vm) : data || {} // 判断是函数执行否则直接返回
   vm._data = data // 将当前data备份到_data内存空间，用于后续将this.XXX代理到该对象上实现this.XXX访问data内属性
@@ -18,8 +18,8 @@ function initData(vm) {
   Object.keys(data).forEach((key) => proxy(vm, '_data', key)) // 代理this.xxx到this._data.xxx
 }
 
-function proxy(target, sourceKey, key) {
-  Object.defineProperties(target, sourceKey, {
+function proxy(target, sourceKey, key) { // 代理 this.xxx 到this._data.xxx
+  Object.defineProperty(target, key, {
     configurable: true,
     enumerable: true,
     get() {

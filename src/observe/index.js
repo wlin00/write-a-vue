@@ -9,7 +9,7 @@ class Observer {
 
 function defineReactive(target, key, value) {
   observe(value) // 开始先对当前key对应的value做一次递归挟持，若这个value是普通数据类型就直接不操作; 此处为挟持一开始就为对象的键值value
-  Object.defineProperties(target, key, {
+  Object.defineProperty(target, key, {
     configurable: true,
     enumerable: true,
     get() {
