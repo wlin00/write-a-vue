@@ -24,7 +24,6 @@ function defineReactive(target, key, value) {
       value = newValue
     }
   })
-
 }
 
 export function observe(data) {
