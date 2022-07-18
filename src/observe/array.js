@@ -1,6 +1,5 @@
 const oldArrayProto = Array.prototype // 获取数组原型
-
-export let newArrayProto = Object.create(oldArrayProto) // 自定义数组实例，继承于普通数组 newArrayProto.__proto__ = Array.prototype
+export const newArrayProto = Object.create(oldArrayProto) // 自定义数组实例，继承于普通数组原型 newArrayProto.__proto__ = Array.prototype
 
 // 重写7个可能改变当前数组本身的操作，其中监听push、unshift、splice这三个可能新增数组元素的方法，若出现新增则对新增的元素做数据挟持
 const methods = [

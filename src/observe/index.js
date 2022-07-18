@@ -15,7 +15,7 @@ class Observer {
 
     // 为了避免使用Object.defineProperty对数组进行挟持的性能损耗，特殊对数组进行处理
     if (Array.isArray(data)) {
-      data.__proto__ = newArrayProto // 当前实例继承于自定义数组原型
+      data.__proto__ = newArrayProto // 当前数组原型继承于自定义数组原型
       this.observeArray(data)
     } else { // 处理对象
       this.walk(data)
