@@ -7,9 +7,12 @@
 </head>
 <body>
   <div id="app">
-    <h1>{{ str }}</h1>
-    {{ str }}
-    <span>{{ name }}</span>
+    <h1>{{ title }}</h1>
+    <div>{{ str }}</div>
+    {{ name }}
+    <div style="margin-top: 20px;;">
+      <button @click="handleClick">{{ btnName }}</button>
+    </div>
   </div>
 
   <script src="./vue.js"></script>
@@ -18,8 +21,32 @@
       el: '#app',
       data: {
         str: 'Test字符串',
-        name:'Test姓名',
-      }
+        title: '标题',
+        name: 'Test姓名',
+        arr: [{ obj: [2,'a'] }],
+        btnName: '按钮'
+      },
+      methods: {
+        handleClick() {
+          // 修改data中数据，更新视图
+          this.title = '修改后的标题'
+          this.str = '_new'
+          this.name = '111'
+          console.log(this)
+        }
+      },
+      beforeCreate() {
+        console.log('beforeCreate-> ', '$el', this.$el, '$data',  this.$data)
+      },
+      created() {
+        console.log('created-> ', '$el', this.$el, '$data',  this.$data)
+      },
+      beforeMount() {
+        console.log('beforeMount-> ', '$el', this.$el, '$data',  this.$data)
+      },
+      mounted() {
+        console.log('mounted-> ', '$el', this.$el, '$data',  this.$data)
+      },
     })
   </script>
 </body>
