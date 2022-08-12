@@ -26,12 +26,11 @@
             // 在初始化用属性去渲染文本节点时，首先给每个组件实例绑定一个watcher，我们记录当前属性被哪些watcher所依赖
             let watcher = new Watcher(item, 'textContent', this, key)
             if (this.hasOwnProperty(key)) { // 若当前属性合法， 则记录属性被当前watcher所依赖
-              if (this.$watchEvent[key]) {
-                this.$watchEvent[key].push(watcher)  // 用于数据修改后，setter可以取出全局wacher-map中的对应属性的watcher数组，去通知每个watcher更新视图
-              } else { // 若当前全局wacher-map没有当前属性，则初始化map的对应值为一个数组
-                this.$watchEvent[key] = []
-                this.$watchEvent[key].push(watcher)
+              if (!this.$watchEvent[key]) {
+                this.$watchEvent[key] = [] // 若当前全局wacher-map没有当前属性，则初始化map的对应值为一个数组
               }
+              // 用于数据修改后，setter可以取出全局wacher-map中的对应属性的watcher数组，去通知每个watcher更新视图
+              this.$watchEvent[key].push(watcher)
             }
             return this.$data[key]
           })
