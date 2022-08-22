@@ -2,6 +2,7 @@
     constructor(options) {
       this.$options = options
       options.beforeCreate.call(this) // 《beforeCreate》：拿不到 $el 和 $data
+      // 重点：实际上dep在源码里是在defineReactive里生成， 与每个属性key一一对应，用于存放watcher数组来根据数据变化更新视图
       this.$watchEvent = {} // 用于收集 属性 - 组件的watchs数组 的一个映射map
       this.$data = options.data
       
@@ -148,6 +149,8 @@
   
   // 工具方法 用于递归数据挟持
   function defineReactive(target, key, value, vm) {
+    // 重点：这里会初始化，创建一个和key绑定的dep实例
+    // const dep = new Dep()
     observe.call(target, value) // 开始先对当前key对应的value做一次递归挟持，若这个value是普通数据类型就直接不操作; 此处为挟持一开始就为对象的键值value
     let self = this
     Object.defineProperty(target, key, {
@@ -155,6 +158,7 @@
       enumerable: true,
       get() {
         return value
+        // 重点：这里需要将依赖当前key的watcher实例，放入dep的subs数组里，方便后续数据改变通知他们更新视图
       },
       set(newValue) {
         if (newValue === value) {
@@ -169,6 +173,11 @@
             item.update()
           })
         }
+        // 重点：这里源码里更新视图其实是调用了dep.notify方法来将watcher推入异步队列queueWather来更新视图
+        // 然后在触发更新的方法外部包裹了一层nextTick，这使得nextTick的异步回调执行时，同步任务中对当前dep中的watcher已经收集完毕
+        // nextTick的选取策略优先级依次是：promise>mutationObserver>setImmediate>setTimeout
+        // 当nextTick中的回调执行，即对视图更新时，会根据watcher的id做去重和排序，目的是先渲染子组件后渲染父组件，从而减少渲染次数来进行性能优化
+        // 最后调用所有watcher上的run方法来执行render函数，来将虚拟Dom转真实dom（走diff的那套：头头、尾尾、头尾、尾头、key）的多叉树比对，最后完成真实dom的更新替换。
       }
     })
   }
